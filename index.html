@@ -1,19 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale =1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header img {
+      max-height: 50px;
+    }
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .content {
+      margin-bottom: 20px;
+    }
+    .forum {
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+    .thread {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .thread:last-child {
+      border-bottom: none;
+    }
+    .thread a {
+      color: #333;
+      text-decoration: none;
+    }
+    .thread a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Crazy Colors!!</h1>
-        <h5><small>BAsed on codepen by manuel pinto</small><a href="https://manuelpinto.in" target="_blank"</h5>
-    </div>
-    <script src="app.js"></script>
+  <header>
+    <img src="your-image-url.jpg" alt="Website Logo">
+    <h1>My Website</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Social</a>
+      <a href="#">Login/Sign Up</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <section class="content">
+      <h2>Welcome to our Website!</h2>
+      <p>This is the homepage content. You can add any content here.</p>
+    </section>
+
+    <section class="forum">
+      <h2>Forum Threads</h2>
+      <div class="thread">
+        <a href="thread1.html"><h3>Thread 1</h3></a>
+        <p>This is the content of thread 1.</p>
+      </div>
+      <div class="thread">
+        <a href="thread2.html"><h3>Thread 2</h3></a>
+        <p>This is the content of thread 2.</p>
+      </div>
+      <div class="thread">
+        <a href="thread3.html"><h3>Thread 3</h3></a>
+        <p>This is the content of thread 3.</p>
+      </div>
+      <!-- Add more threads as needed -->
+    </section>
+  </div>
 </body>
 </html>

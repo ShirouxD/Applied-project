@@ -1,18 +1,68 @@
 body {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-	height: 100vh;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+  }
+  
+  header {
+	background-color: #333;
+	color: #fff;
+	padding: 10px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  }
+  
+  nav {
+	display: flex;
+	gap: 20px;
+  }
+  
+  nav a {
+	color: #fff;
+	text-decoration: none;
+  }
+  
+  .container {
+	max-width: 1200px;
+	margin: 20px auto;
+	padding: 0 20px;
+  }
+  
+  .content {
+	margin-bottom: 20px;
+  }
+  
+  .social-page, .login {
+	background-color: #f0f0f0;
+	padding: 20px;
+  }
+  
+  .login {
+	max-width: 300px;
+	margin: 0 auto;
+  }
+  
+  .login h2 {
+	margin-bottom: 10px;
+  }
+  
+  .login form input[type="text"], .login form input[type="password"], .login form input[type="submit"] {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+  
+  .login form input[type="submit"] {
+	background-color: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+  }
+  
+  .login form input[type="submit"]:hover {
+	background-color: #555;
+  }
+  
