@@ -225,8 +225,14 @@ def activityPage(request):
 
 ##################################################################################################
 def socialPage(request):
+    # Retrieve existing social page posts
     posts = SocialPage.objects.all().order_by('-timestamp')
-    form = SocialPageForm()
+    context = {'posts': posts}
+    return render(request, 'base/social_page.html', context)
+
+@login_required(login_url='login')
+def createSocialPost(request):
+    # Create a new social page post
     if request.method == 'POST':
         form = SocialPageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -234,8 +240,11 @@ def socialPage(request):
             post.user = request.user
             post.save()
             return redirect('social_page')
-    context = {'posts': posts, 'form': form}
-    return render(request, 'base/social_page.html', context)
+    else:
+        form = SocialPageForm()
+    
+    context = {'form': form}
+    return render(request, 'base/social_page_form.html', context)
 
 @login_required(login_url='login')
 def deleteSocialPost(request, pk):

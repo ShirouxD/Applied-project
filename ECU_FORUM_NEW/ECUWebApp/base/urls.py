@@ -16,5 +16,6 @@ urlpatterns = [
     path('topics/', views.topicsPage, name="topics"),
     path('activity/', views.activityPage, name="activity"),
     path('social_page/', views.socialPage, name="social_page"),
+    path('social/create/', views.createSocialPost, name='create_social_post'),
     path('delete_social_post/<int:pk>/', views.deleteSocialPost, name="delete_social_post"),
 ]

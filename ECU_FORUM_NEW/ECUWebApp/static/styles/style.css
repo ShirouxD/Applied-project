@@ -1179,3 +1179,81 @@ a {
   color: var(--color-main);
   font-weight: 1.4rem;
 }
+
+
+
+/* CSS for social_page.html */
+
+/* Social Page Container */
+.social-page {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #3f4156;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Social Page Header */
+.social-page__header h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Social Page Feed */
+.social-page__feed {
+    margin-top: 20px;
+}
+
+/* Individual Post */
+.social-page__post {
+    margin-bottom: 20px; /* Adjust as needed */
+    padding-bottom: 20px; /* Add some padding between posts */
+    border-bottom: 1px solid #ccc; /* Add a solid border line between posts */
+    
+}
+
+/* Post Image */
+.social-page__post img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Post Video */
+.social-page__post video {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* Post Caption */
+.social-page__post p {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Social Page Form */
+.social-page__form {
+    margin-top: 20px;
+}
+
+/* Form Input */
+.social-page__form input[type="file"] {
+    margin-bottom: 10px;
+}
+
+/* Submit Button */
+.social-page__form button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Submit Button Hover Effect */
+.social-page__form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+

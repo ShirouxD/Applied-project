@@ -45,6 +45,9 @@ class SocialPageForm(forms.ModelForm):
 
         return cleaned_data
     
+
+    
+    
 class UserForm(ModelForm):
     class Meta:
         model = User
