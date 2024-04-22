@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Thread, Topic, Comment, SocialPage, User
-from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm
+from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation
+from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm
 from django.db.models import Q
 # from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse
 # Create your views here.
 
 
@@ -260,8 +261,48 @@ def deleteSocialPost(request, pk):
 
     return render(request, 'base/delete.html', {'obj': social_page_post})
 
-def reserveRoom(request):
-     return render(request, 'base/reservation.html')
+
 
 def uniMap(request):
      return render(request, 'base/unimap.html')
+
+
+
+
+def viewReservations(request):
+    reservations = Reservation.objects.all()
+    return render(request, 'base/view_reservation.html', {'reservations': reservations})
+
+
+def reserveRoom(request):
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            # Check for reservation conflicts
+            new_reservation = form.save(commit=False)  # Don't save to database yet
+            if Reservation.objects.filter(
+                room=new_reservation.room,
+                date=new_reservation.date,
+                start_time__lt=new_reservation.end_time,
+                end_time__gt=new_reservation.start_time
+            ).exists():
+                # Conflicting reservation found
+                return HttpResponse('Reservation unsuccessful: Room already reserved for this time slot.')
+            else:
+                # No conflicts, save the reservation
+                new_reservation.save()
+                return HttpResponse('RESERVATION SUCCESS! <a href="{}">Back</a>'.format(reverse('reserve_room')))  # Return success message
+    else:
+        form = ReservationForm()
+    return render(request, 'base/reservation.html', {'form': form})
+
+def deleteReservation(request, reservation_id):
+    reservation = Reservation.objects.get(pk=reservation_id)
+    if request.method == 'POST':
+        reservation.delete()
+        messages.success(request, 'Reservation deleted successfully.')
+        return redirect('view_reservation')
+    return render(request, 'base/delete.html', {'obj': reservation})
+
+
+

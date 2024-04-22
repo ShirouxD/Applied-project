@@ -1,0 +1,28 @@
+<!-- room_reservation.html -->
+{% extends 'main.html' %}
+{% block content %}
+    <h1>Room Reservation</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_room">Room:</label>
+        <select name="room" id="id_room">
+            <option value="">Select a room</option>
+            <option value="1">401</option>
+            <option value="2">402</option>
+            <option value="3">601</option>
+            <option value="4">602</option>
+            <!-- Add more rooms here if needed -->
+        </select>
+        <br>
+        <label for="id_user_id">Your ID:</label>
+        <input type="text" name="user_id" id="id_user_id"><br>
+        <label for="id_date">Date:</label>
+        <input type="date" name="date" id="id_date"><br>
+        <label for="id_start_time">Start Time:</label>
+        <input type="time" name="start_time" id="id_start_time"><br>
+        <label for="id_end_time">End Time:</label>
+        <input type="time" name="end_time" id="id_end_time"><br>
+        <button type="submit">Reserve</button>
+        <button> <a href="{% url 'view_reservation' %}" >View Reservations</a> </button>
+    </form>
+{% endblock %}

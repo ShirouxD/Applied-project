@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% block content %}
+    <h1>Your Reservations</h1>
+    <ul>
+        {% for reservation in reservations %}
+            <li>{{ reservation.room.name }} - {{ reservation.date }} ({{ reservation.start_time }} to {{ reservation.end_time }})
+                <form action="{% url 'delete_reservation' reservation.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

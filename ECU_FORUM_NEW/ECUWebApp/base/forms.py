@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Thread, SocialPage, User
+from .models import Thread, SocialPage, User, Reservation, Room
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -52,4 +52,20 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['name', 'username', 'email', 'bio', 'avatar']
-        
+    
+
+
+
+class ReservationForm(forms.ModelForm):
+    class Meta:
+        model = Reservation
+        fields = ['room', 'user_id', 'date', 'start_time', 'end_time']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'type': 'time'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['room'].queryset = Room.objects.all()
