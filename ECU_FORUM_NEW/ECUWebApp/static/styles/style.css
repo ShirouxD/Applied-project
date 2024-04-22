@@ -225,9 +225,9 @@ a {
 }
 
 .dropdown-menu a {
-  padding: 1.2rem 4rem;
+  padding: 1.2rem 2rem;
   display: block;
-  width: 220px;
+  width: 225px;
   color: var(--color-light) !important;
   font-weight: 500;
   font-size: 1.4rem;

@@ -1,14 +1,33 @@
 {% extends 'main.html' %}
 {% block content %}
-    <h1>Your Reservations</h1>
-    <ul>
-        {% for reservation in reservations %}
-            <li>{{ reservation.room.name }} - {{ reservation.date }} ({{ reservation.start_time }} to {{ reservation.end_time }})
-                <form action="{% url 'delete_reservation' reservation.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        {% endfor %}
+  <div class="activities">
+    <div class="activities__header">
+      <h2>Your Reservations</h2>
+    </div>
+    <ul class="activities__list">
+      {% for reservation in reservations %}
+      <li class="activities__item">
+        <div class="activities__itemContent">
+          <div class="activities__itemHeader">
+            <br>
+            <h3 class="activities__itemTitle">Room: {{ reservation.room.name }}</h3>
+            <p class="activities__itemTime"><strong>Date and Time:</strong> {{ reservation.date }} ({{ reservation.start_time }} to {{ reservation.end_time }})</p>
+            
+        </div>
+          <form action="{% url 'delete_reservation' reservation.id %}" method="post">
+            {% csrf_token %}
+    
+            <button class="btn btn--main" type="submit" style="padding: 5px 10px; font-size: 14px;">Delete</button>
+            <br>
+            <br>
+            
+            <hr>
+            
+          </form>
+        </div>
+      </li>
+      {% endfor %}
     </ul>
+  </div>
 {% endblock %}
+

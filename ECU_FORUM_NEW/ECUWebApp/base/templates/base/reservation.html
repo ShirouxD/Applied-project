@@ -1,5 +1,71 @@
-<!-- room_reservation.html -->
+
 {% extends 'main.html' %}
+
+
+
+{% block content %}
+  <main class="create-room layout">
+    <div class="container">
+      <div class="layout__box">
+        <div class="layout__boxHeader">
+          <div class="layout__boxTitle">
+            <a href="{% url 'home' %}">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                <title>arrow-left</title>
+                <path
+                  d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z">
+                </path>
+              </svg>
+            </a>
+            <h3>RESERVE A PRESENTATION ROOM</h3>
+          </div>
+        </div>
+        <div class="layout__body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form__group">
+              <label for="id_room">Room:</label>
+              <select name="room" id="id_room">
+                <option value="">Select a room</option>
+                <option value="1">401</option>
+                <option value="2">402</option>
+                <option value="3">601</option>
+                <option value="4">602</option>
+                <!-- Add more rooms here if needed -->
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="id_user_id">Your ID:</label>
+              <input type="text" name="user_id" id="id_user_id">
+            </div>
+            <div class="form__group">
+              <label for="id_date">Date:</label>
+              <input type="date" name="date" id="id_date">
+            </div>
+            <div class="form__group">
+              <label for="id_start_time">Start Time:</label>
+              <input type="time" name="start_time" id="id_start_time">
+            </div>
+            <div class="form__group">
+              <label for="id_end_time">End Time:</label>
+              <input type="time" name="end_time" id="id_end_time">
+            </div>
+            <div class="form__action">
+              <a class="btn btn--dark" href="{% url 'home' %}">Cancel</a>
+              <button class="btn btn--main" type="button"><a href="{% url 'view_reservation' %}" style="color: var(--color-dark);">View Reservations</a></button>
+              <button class="btn btn--main" type="submit">Reserve</button>
+              
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock content %}
+
+
+{% comment %} <!-- room_reservation.html -->
+
 {% block content %}
     <h1>Room Reservation</h1>
     <form method="post">
@@ -25,4 +91,4 @@
         <button type="submit">Reserve</button>
         <button> <a href="{% url 'view_reservation' %}" >View Reservations</a> </button>
     </form>
-{% endblock %}
+{% endblock %} {% endcomment %}
