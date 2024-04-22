@@ -1,11 +1,10 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
     <main class="layout layout--3">
         <div class="container">
             <!-- Topics Start -->
-            {% include 'base/topics_component.html' %}
-
+             {% include 'base/topics_component.html' %} 
             <!-- Topics End -->
 
             <!-- Room List Start -->
@@ -26,53 +25,47 @@
                     </div>
                 </div>
                 <div class="roomList__header">
-                    <div>
-                        <h2>Posts</h2>
-                        <p>{{ thread_count }} Posts available</p>
-                    </div>
-                    <a class="btn btn--main" href="{% url 'create_social_post' %}">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                            <title>add</title>
-                            <path d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"></path>
-                        </svg>
-                        Create Post
-                    </a>
+                    
+                   
                 </div>
 
-                {% include 'base/feed_component.html' %}
+                
 
                 <!-- Social Page Feed Start -->
-                <div class="social-page__feed">
+                <div class="map-page__feed">
                     <!-- Iterate over social page posts and display them -->
-                    {% for post in posts %}
-                    <div class="social-page__post">
-                        <div class="avatar avatar--small">
-                            <img src="{{post.user.avatar.url}}" />
-                          </div>
-                        {{post.user.name}}
-                        <!-- Display post image or video -->
-                        {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="Post Image">
-                        {% elif post.video %}
-                        <video controls>
-                            <source src="{{ post.video.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        {% endif %}
+                    
+                    <div class="map-page__post">
+                        
+                        <h2>Floor 1</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
+                        <hr>
+                        <h2>Floor 2</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
+                        <hr>
+                        <h2>Floor 3</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
+                        <hr>
+                        <h2>Floor 4</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
+                        <hr>
+                        <h2>Floor 5</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
+                        <hr>
+                        <h2>Floor 6</h2>
+                        <img src="{% static 'images/map1.jpg' %}" />
 
-                        <!-- Display post caption -->
-                        <p>{{ post.caption }}</p>
 
                         <!-- Add any additional post information here if needed -->
                     </div>
-                    {% endfor %}
+                    
                 </div>
                 <!-- Social Page Feed End -->
             </div>
             <!-- Room List End -->
 
             <!-- Activities Start -->
-            {% include 'base/activity_component.html' %}
+            {% include 'base/activity_component.html' %} 
             <!-- Activities End -->
         </div>
     </main>

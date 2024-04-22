@@ -259,3 +259,9 @@ def deleteSocialPost(request, pk):
         return redirect('social_page')
 
     return render(request, 'base/delete.html', {'obj': social_page_post})
+
+def reserveRoom(request):
+     return render(request, 'base/reservation.html')
+
+def uniMap(request):
+     return render(request, 'base/unimap.html')

@@ -18,4 +18,6 @@ urlpatterns = [
     path('social_page/', views.socialPage, name="social_page"),
     path('social/create/', views.createSocialPost, name='create_social_post'),
     path('delete_social_post/<int:pk>/', views.deleteSocialPost, name="delete_social_post"),
+    path('uni_map/', views.uniMap, name="uni_map"),
+    path('reserve_room/', views.reserveRoom, name="reserve_room"),
 ]
