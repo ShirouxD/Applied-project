@@ -29,6 +29,11 @@
               {{user.bio}}
             </p>
           </div>
+          {% if request.user.id != user.id %}
+          <div class="profile__about">
+            <a href="{% url 'chat' user.id %}">Message</a>
+          </div>
+          {% endif %}
         </div>
 
         <div class="roomList__header">

@@ -22,5 +22,8 @@ urlpatterns = [
     path('view_reservation/', views.viewReservations, name="view_reservation"),
     path('reserve_room/', views.reserveRoom, name="reserve_room"),
     path('delete_reservation/<int:reservation_id>/', views.deleteReservation, name="delete_reservation"),
-    
+    path('chats', views.allChats, name="chats"),
+    path('chats/<str:pk>/', views.singleChat, name="chats"),
+    path('chat/<str:pk>/', views.chat, name="chat"),
+    path('delete_message/<str:pk>/', views.deleteMessage, name="delete_message")
 ]

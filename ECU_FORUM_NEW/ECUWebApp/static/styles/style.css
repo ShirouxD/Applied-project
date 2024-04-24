@@ -17,8 +17,8 @@
 /*========== base styles ==========*/
 
 * {
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -356,7 +356,6 @@ a {
   color: var(--color-gray);
 }
 
-
 /* Style for the new buttons */
 .header__menu .btn {
   /* Add your button styles here */
@@ -365,9 +364,7 @@ a {
 }
 .header__menu .btn:hover {
   color: var(--color-main); /* Change font color on hover to main color */
-  
 }
-
 
 .header__menu img {
   height: 3.6rem;
@@ -1180,82 +1177,78 @@ a {
   font-weight: 1.4rem;
 }
 
-
-
 /* CSS for social_page.html */
 
 /* Social Page Container */
 .social-page {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #3f4156;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #3f4156;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Social Page Header */
 .social-page__header h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 /* Social Page Feed */
 .social-page__feed {
-    margin-top: 20px;
-    
+  margin-top: 20px;
 }
 
 /* Individual Post */
 .social-page__post {
-    margin-bottom: 20px; /* Adjust as needed */
-    padding-bottom: 20px; /* Add some padding between posts */
-    border-bottom: 1px solid #ccc; /* Add a solid border line between posts */
-    
+  margin-bottom: 20px; /* Adjust as needed */
+  padding-bottom: 20px; /* Add some padding between posts */
+  border-bottom: 1px solid #ccc; /* Add a solid border line between posts */
 }
 
 /* Post Image */
 .social-page__post img {
-    max-width: 100%;
-    border-radius: 8px;
+  max-width: 100%;
+  border-radius: 8px;
 }
 
 /* Post Video */
 .social-page__post video {
-    width: 100%;
-    border-radius: 8px;
+  width: 100%;
+  border-radius: 8px;
 }
 
 /* Post Caption */
 .social-page__post p {
-    margin-top: 10px;
-    font-size: 16px;
-    line-height: 1.5;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 /* Social Page Form */
 .social-page__form {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* Form Input */
 .social-page__form input[type="file"] {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 /* Submit Button */
 .social-page__form button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 /* Submit Button Hover Effect */
 .social-page__form button[type="submit"]:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .map-page__feed {
@@ -1266,8 +1259,6 @@ a {
   /*justify-content: center; /* Center vertically */
   /*text-align: center; Center text */
   font-size: 20px;
-  
-  
 }
 
 .map-page__post img {
@@ -1275,3 +1266,32 @@ a {
   border-radius: 8px;
 }
 
+/* Chats Page Styles */
+.chats {
+  flex-basis: 25% !important;
+}
+
+.messages {
+  flex-basis: 72% !important;
+}
+
+.message-conversation {
+  margin-top: 2vh !important;
+}
+
+.message-room {
+  height: 90% !important;
+  margin-bottom: 0px !important;
+  margin-top: 0px !important;
+}
+
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}

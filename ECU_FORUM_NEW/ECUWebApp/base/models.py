@@ -84,3 +84,29 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"{self.room.name} - {self.date} ({self.start_time} to {self.end_time})"
+
+# Model for Chats
+class Chat(models.Model):
+    sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='receiver', on_delete=models.CASCADE)
+    updated = models.DateTimeField(auto_now= True)
+    created = models.DateTimeField(auto_now_add= True)
+
+
+    class Meta:
+       ordering = ['-updated', '-created']
+
+# Model for Messages
+class Message(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    body = models.TextField()
+    updated = models.DateTimeField(auto_now= True)
+    created = models.DateTimeField(auto_now_add= True)
+
+
+    class Meta:
+       ordering = ['-updated', '-created']
+    
+    def __str__(self):
+        return self.body[0:50]

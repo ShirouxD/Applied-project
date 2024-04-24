@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Thread, SocialPage, User, Reservation, Room
+from .models import Thread, SocialPage, User, Reservation, Room, Message
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -69,3 +69,8 @@ class ReservationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['room'].queryset = Room.objects.all()
+
+class MessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = ['body']

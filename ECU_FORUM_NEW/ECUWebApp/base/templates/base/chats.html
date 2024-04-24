@@ -1,0 +1,111 @@
+{% extends 'main.html' %} {% block content %}
+
+<main class="profile-page layout layout--2">
+  <div class="container">
+    <!--   Start -->
+    <div class="participants chats">
+      <h3 class="participants__top">Chats <span>{{ chatCount }}</span></h3>
+      <div class="participants__list scroll">
+        {% for chat in chats %}
+        <a href="{% url 'chats' chat.id %}" class="participant">
+          <div class="avatar avatar--medium">
+            <img src="{{chat.receiver.avatar.url}}" />
+          </div>
+          <p>
+            {{chat.receiver.name}}
+            <span>@{{chat.receiver.username}}</span>
+          </p>
+        </a>
+
+        {% endfor %}
+      </div>
+    </div>
+    <!--  End -->
+    <!-- Room Start -->
+    {% if chat %}
+    <div class="room messages">
+      <div class="room__top">
+        <div class="room__topLeft">
+          <h3>{{chat.receiver.name}}</h3>
+        </div>
+      </div>
+      <div class="room__box scroll">
+        <div class="room__conversation message-room">
+          <div class="threads message-conversation scroll">
+            {% for chatMessage in chatMessages %}
+            <div class="thread">
+              <div class="thread__top">
+                <div class="thread__author">
+                  <a
+                    href="{% url 'user_profile' chatMessage.user.id %}"
+                    class="thread__authorInfo"
+                  >
+                    <div class="avatar avatar--small">
+                      <img src="{{chatMessage.user.avatar.url}}" />
+                    </div>
+                    {% if request.user == chatMessage.user %} You {% else %}
+                    {{chatMessage.user.name}} {% endif %}
+                  </a>
+                  <span class="thread__date"
+                    >{{chatMessage.created|timesince}} ago</span
+                  >
+                </div>
+                {% if request.user == chatMessage.user %}
+                <a href="{% url 'delete_message' chatMessage.id %}">
+                  <div class="thread__delete">
+                    <svg
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 32 32"
+                    >
+                      <title>remove</title>
+                      <path
+                        d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+                      ></path>
+                    </svg>
+                  </div>
+                </a>
+                {% endif %}
+              </div>
+              <div class="thread__details">{{chatMessage.body}}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="room__message">
+        <form action="" method="POST">
+          {% csrf_token %}
+          <input
+            required
+            autofocus
+            name="body"
+            placeholder="Write your message here..."
+          />
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <div class="room messages">
+      <div class="room__top">
+        <div class="room__topLeft"></div>
+      </div>
+      <div class="room__box scroll">
+        <div class="room__conversation message-room empty-message">
+          <h3>Nothing to show</h3>
+          <p>Select a chat to view</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <!-- Room End -->
+  </div>
+</main>
+<script>
+  const messageCoversation = document.querySelector(".message-conversation");
+  if (messageCoversation)
+    messageCoversation.scrollTop = messageCoversation.scrollHeight;
+</script>
+{% endblock content %}

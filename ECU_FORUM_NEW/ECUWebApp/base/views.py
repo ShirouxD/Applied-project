@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation
-from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm
+from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation, Chat, Message
+from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm, MessageForm
 from django.db.models import Q
 # from django.contrib.auth.models import User
 from django.contrib import messages
@@ -304,5 +304,53 @@ def deleteReservation(request, reservation_id):
         return redirect('view_reservation')
     return render(request, 'base/delete.html', {'obj': reservation})
 
+@login_required(login_url='login')
+def chat(request, pk):
+    receiver = User.objects.get(pk=pk)
+    chat_instance = Chat.objects.filter(sender=request.user, receiver=receiver).first()
+    if chat_instance:
+        print("ok")
+    else:
+        receiver
+        chat_instance = Chat.objects.create(sender=request.user, receiver=receiver)
+    return redirect('chats', pk=chat_instance.id)
+
+@login_required(login_url='login')
+def allChats(request):
+    chats = Chat.objects.filter(Q(sender=request.user) | Q(receiver=request.user)).order_by('-created')
+    context = {'chats': chats, 'chatCount': chats.count()}
+    return render(request, 'base/chats.html', context)
+
+@login_required(login_url='login')
+def singleChat(request, pk):
+    chat = Chat.objects.get(pk=pk)
+    if chat.sender != request.user and chat.receiver != request.user:
+        messages.error(request, 'Chat does not exist')
+        return redirect('chats')
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.chat = chat
+            message.user = request.user
+            message.save()
+            return redirect('chats', pk=pk)
+        else:
+            messages.error(request, 'An error occured while sending message')
+
+    chats = Chat.objects.filter(Q(sender=request.user) | Q(receiver=request.user)).order_by('-created')
+    messagesList = Message.objects.filter(Q(chat=chat)).order_by('created')
+    context = {'chats': chats, 'chatCount': chats.count(), 'chat': chat, 'chatMessages':messagesList}
+    return render(request, 'base/chats.html', context)
+
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    if request.user != message.user:
+        return HttpResponse('You cannot do that!')
+    if request.method == 'POST':
+        message.delete()
+        return redirect('chats', pk=message.chat.id)
+    return render(request, 'base/delete.html', {'obj': message})
 
 
