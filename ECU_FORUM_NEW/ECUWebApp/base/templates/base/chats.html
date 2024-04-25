@@ -7,17 +7,29 @@
       <h3 class="participants__top">Chats <span>{{ chatCount }}</span></h3>
       <div class="participants__list scroll">
         {% for chat in chats %}
+    {% if request.user == chat.sender %}
         <a href="{% url 'chats' chat.id %}" class="participant">
           <div class="avatar avatar--medium">
-            <img src="{{chat.receiver.avatar.url}}" />
+            <img src="{{ chat.receiver.avatar.url }}" />
           </div>
           <p>
-            {{chat.receiver.name}}
-            <span>@{{chat.receiver.username}}</span>
+            {{ chat.receiver.name }}
+            <span>@{{ chat.receiver.username }}</span>
           </p>
         </a>
+    {% else %}
+        <a href="{% url 'chats' chat.id %}" class="participant">
+          <div class="avatar avatar--medium">
+            <img src="{{ chat.sender.avatar.url }}" />
+          </div>
+          <p>
+            {{ chat.sender.name }}
+            <span>@{{ chat.sender.username }}</span>
+          </p>
+        </a>
+    {% endif %}
+{% endfor %}
 
-        {% endfor %}
       </div>
     </div>
     <!--  End -->
