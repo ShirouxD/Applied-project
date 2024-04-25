@@ -5,6 +5,16 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
+#Model for Notification
+class Notification(models.Model):
+    title = models.TextField()
+    body = models.TextField()
+    updated = models.DateTimeField(auto_now= True)
+    created = models.DateTimeField(auto_now_add= True)
+
+    class Meta:
+       ordering = ['-updated', '-created']
+
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True, null=True)
     name = models.CharField(max_length=200, null=True)
@@ -13,6 +23,7 @@ class User(AbstractUser):
     avatar = models.ImageField(null=True, default="avatar.svg")
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+    notifications = models.ManyToManyField(Notification, related_name='notifications', blank=True)
 
 
 

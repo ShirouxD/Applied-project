@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation, Chat, Message
-from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm, MessageForm
+from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm, MessageForm, ChatbotMessageForm
 from django.db.models import Q
+from time import sleep
+from . import eliza
+from . import utils
 # from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -11,6 +14,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
 # Create your views here.
 
+def send_notification(title, body, user_id = None):
+    if user_id is not None:
+        user = User.objects.get(pk=user_id)
+        user.notifications.create(title=title, body=body)
+    else:
+        users = User.objects.all()
+        for user in users:
+            user.notifications.create(title=title, body=body)
 
 def loginPage(request):
      page = 'login'
@@ -146,6 +157,10 @@ def createThread(request):
                 # Redirect to a permission denied page or show an appropriate message
                 return HttpResponse("You don't have permission to create threads in this title.")
             thread.save()
+
+            if thread.topic.id == 2:
+                send_notification('Test Notification', 'Test notification body')
+
             return redirect('home')
     context = {'form': form}
     return render(request, 'base/thread_form.html', context)
@@ -334,6 +349,7 @@ def singleChat(request, pk):
             message.chat = chat
             message.user = request.user
             message.save()
+            send_notification("Message Notification", "You received a new message", request.user.id)
             return redirect('chats', pk=pk)
         else:
             messages.error(request, 'An error occured while sending message')
@@ -353,4 +369,25 @@ def deleteMessage(request, pk):
         return redirect('chats', pk=message.chat.id)
     return render(request, 'base/delete.html', {'obj': message})
 
+@login_required(login_url='login')
+def deleteNotification(request, pk):
+    request.user.notifications.remove(pk)
+    return redirect('home')
+
+def chatBot(request):
+    response = ""
+    if request.method == 'POST':
+        form = ChatbotMessageForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['body']
+            rules_list = []
+            default_responses = [
+                "I am not sure, I understand you",
+                ]
+            for pattern, transforms in utils.rules.items():
+                pattern = eliza.remove_punct(str(pattern.upper()))
+                rules_list.append((pattern, transforms))
+            response = eliza.respond(rules_list, query.upper(), default_responses)
+    sleep(0.5)
+    return JsonResponse({'result': response})
 

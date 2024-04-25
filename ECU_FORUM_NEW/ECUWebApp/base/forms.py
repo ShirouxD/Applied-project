@@ -74,3 +74,8 @@ class MessageForm(ModelForm):
     class Meta:
         model = Message
         fields = ['body']
+
+class ChatbotMessageForm(ModelForm):
+    class Meta:
+        model = Message
+        fields = ['body']

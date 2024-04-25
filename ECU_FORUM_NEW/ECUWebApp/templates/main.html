@@ -11,29 +11,41 @@
   </head>
 
   <body>
-    
-    {% include 'navbar.html' %}
-
-    {% if messages %}
-    <ul class = "messages">
-
-        {% for message in messages %}
-        <li>{{message}} </li>
-        {% endfor %}
-
+    {% include 'navbar.html' %} {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
     </ul>
     {% endif %}
 
-    {% block content %}
+    <div class="chatbot-container">
+      <div class="chatbot-window">
+        <p class="chatbot-title">Chatbot</p>
+        <div class="room__conversation message-room">
+          <div
+            class="threads message-conversation chatbot-messages scroll"
+          ></div>
+          <div class="room__message">
+            <form id="chatbot-form" method="POST">
+              {% csrf_token %}
+              <input
+                required=""
+                autofocus=""
+                name="body"
+                placeholder="Write your query here..."
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot">
+        <img src="/static/images/logo.svg" />
+      </div>
+    </div>
 
-    
-    {% endblock %}
-    
-    
+    {% block content %} {% endblock %}
+
     <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>
-
-
-
-

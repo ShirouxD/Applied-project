@@ -25,5 +25,7 @@ urlpatterns = [
     path('chats', views.allChats, name="chats"),
     path('chats/<str:pk>/', views.singleChat, name="chats"),
     path('chat/<str:pk>/', views.chat, name="chat"),
-    path('delete_message/<str:pk>/', views.deleteMessage, name="delete_message")
+    path('delete_message/<str:pk>/', views.deleteMessage, name="delete_message"),
+    path('delete_notification/<str:pk>/', views.deleteNotification, name="delete_notification"),
+    path('chatbot', views.chatBot, name="chatbot")
 ]

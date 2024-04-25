@@ -46,6 +46,16 @@
 
 const dropdownMenu = document.querySelector(".dropdown-menu");
 const dropdownButton = document.querySelector(".dropdown-button");
+const notificationMenu = document.querySelector(".notification-menu");
+const notificationButton = document.querySelector(
+  ".dropdown-button-notification"
+);
+
+if (notificationButton) {
+  notificationButton.addEventListener("click", () => {
+    notificationMenu.classList.toggle("show");
+  });
+}
 
 if (dropdownButton) {
   dropdownButton.addEventListener("click", () => {
@@ -66,4 +76,62 @@ if (photoInput)
 
 // Scroll to Bottom
 const conversationThread = document.querySelector(".room__box");
-if (conversationThread) conversationThread.scrollTop = conversationThread.scrollHeight;
+if (conversationThread)
+  conversationThread.scrollTop = conversationThread.scrollHeight;
+
+const chatbot = document.querySelector(".chatbot");
+const chatbotWindow = document.querySelector(".chatbot-window");
+
+if (chatbot) {
+  chatbot.addEventListener("click", () => {
+    chatbotWindow.classList.toggle("show");
+  });
+}
+
+const chatbotForm = document.querySelector("#chatbot-form");
+const chatbotMessages = document.querySelector(".chatbot-messages");
+
+const appendChatbotMessage = (message, user) => {
+  console.log(message);
+  if (chatbotMessages) {
+    const div = document.createElement("div");
+    div.className = "thread";
+    div.innerHTML = `
+              <div class="thread__top">
+                <div class="thread__author">
+                  <a
+                    class="thread__authorInfo"
+                  >
+                    ${user}
+                  </a>
+                </div>
+              </div>
+              <div class="thread__details">
+              ${message}
+            </div>
+      `;
+
+    chatbotMessages.appendChild(div);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+};
+
+if (chatbotForm) {
+  chatbotForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(chatbotForm);
+    const input = chatbotForm.querySelector('input[name="body"]');
+    appendChatbotMessage(input.value, "You");
+    fetch("/chatbot", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((d) => {
+        appendChatbotMessage(d.result, "Chatbot");
+      });
+
+    if (input) input.value = "";
+  });
+}
