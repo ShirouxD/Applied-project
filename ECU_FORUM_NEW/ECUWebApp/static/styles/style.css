@@ -1295,3 +1295,33 @@ a {
 .no-wrap {
   white-space: nowrap;
 }
+
+
+.social-page__post {
+  position: relative;
+}
+
+.social-page__post form {
+  position: absolute;
+  top: 0px; 
+  right: 10px;
+}
+
+.social-page__post input[type="submit"] {
+  padding: 10px 15px;
+  border-radius: 4px;
+  background: #007bff; 
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.social-page__post input[type="submit"]:hover {
+  background: #449d44;
+}
+
+
+
+

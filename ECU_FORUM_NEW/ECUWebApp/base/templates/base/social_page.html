@@ -63,7 +63,14 @@
                         <!-- Display post caption -->
                         <p>{{ post.caption }}</p>
 
-                        <!-- Add any additional post information here if needed -->
+                        {% if request.user == post.user %}
+
+                        <form action="{% url 'delete_social_post' post.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
