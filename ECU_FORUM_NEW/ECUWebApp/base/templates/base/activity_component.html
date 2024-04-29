@@ -1,5 +1,66 @@
 
 <div class="activities">
+
+  <div class="activities__header">
+    <h2>RECENT NEWS <div class="flashing-light"></div></h2>
+    
+  </div>
+  {% for thread in recent_news_threads %}
+  <div class="activities__box">
+    <div class="activities__boxHeader roomListRoom__header">
+      <a href="{% url 'user_profile' thread.host.id %}" class="roomListRoom__author">
+        <div class="avatar avatar--small">
+          <img src="{{thread.host.avatar.url}}" />
+        </div>
+        <p>
+          {{thread.host.name}}
+          <span>@{{thread.host.username}}</span>
+          
+          <span>{{thread.created|timesince}} ago</span>
+        </p>
+      </a>
+
+
+      
+    </div>
+    <div class="activities__boxContent">
+      <p>posted <a href="{% url 'thread' thread.id %}">{{ thread.name }}</a> in <a href="{% url 'home' %}?q={{thread.topic.name}}">{{ thread.topic.name }} </a> </p>
+      
+    </div>
+  </div>
+  {% endfor %}
+  
+
+
+
+    <div class="activities__header">
+      <h2>RECENT EVENTS <div class="flashing-light"></div></h2>
+    </div>
+    {% for thread in recent_events_threads %}
+  <div class="activities__box">
+    <div class="activities__boxHeader roomListRoom__header">
+      <a href="{% url 'user_profile' thread.host.id %}" class="roomListRoom__author">
+        <div class="avatar avatar--small">
+          <img src="{{thread.host.avatar.url}}" />
+        </div>
+        <p>
+          {{thread.host.name}}
+          <span>@{{thread.host.username}}</span>
+          
+          <span>{{thread.created|timesince}} ago</span>
+        </p>
+      </a>
+
+
+      
+    </div>
+    <div class="activities__boxContent">
+      <p>posted <a href="{% url 'thread' thread.id %}">{{ thread.name }}</a> in <a href="{% url 'home' %}?q={{thread.topic.name}}">{{ thread.topic.name }} </a> </p>
+      
+    </div>
+  </div>
+  {% endfor %}
+
     <div class="activities__header">
       <h2>Recent Activities</h2>
     </div>
@@ -40,6 +101,7 @@
       </div>
     </div>
     {% endfor %}
+    
 
   </div>
 

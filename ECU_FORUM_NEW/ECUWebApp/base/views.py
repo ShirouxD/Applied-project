@@ -12,6 +12,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
+from datetime import timedelta
+from django.utils import timezone
 # Create your views here.
 
 def send_notification(title, body, user_id = None):
@@ -73,17 +75,45 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form})
 
 
-def home(request):
+# def home(request):
 
+#     q = request.GET.get('q') if request.GET.get('q') != None else ''
+#     threads = Thread.objects.filter(
+#         Q(topic__name__icontains=q) |
+#         Q(name__icontains=q) |
+#         Q(description__icontains=q)
+#         )#[0:5]
+#     thread_count = threads.count()
+# #############################################################################################3333
+#     paginator = Paginator(threads, 5)  # Show 5 threads per page
+
+#     page_number = request.GET.get('page')
+#     try:
+#         threads = paginator.page(page_number)
+#     except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#         threads = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#         threads = paginator.page(paginator.num_pages)
+
+# #####################################################################################################
+#     topics = Topic.objects.all() #[0:5]
+    
+#     thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:3]
+#     context = {'threads': threads, 'topics': topics, 'thread_comments': thread_comments, 'thread_count': thread_count, 'q': q}
+#     return render(request, 'base/home.html', context )
+
+def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     threads = Thread.objects.filter(
         Q(topic__name__icontains=q) |
         Q(name__icontains=q) |
         Q(description__icontains=q)
-        )#[0:5]
+    )
     thread_count = threads.count()
-#############################################################################################3333
-    paginator = Paginator(threads, 5)  # Show 5 threads per page
+
+    paginator = Paginator(threads, 6)  # Show 5 threads per page
 
     page_number = request.GET.get('page')
     try:
@@ -95,13 +125,26 @@ def home(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         threads = paginator.page(paginator.num_pages)
 
-#####################################################################################################
-    topics = Topic.objects.all() #[0:5]
-    
-    thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:5]
-    context = {'threads': threads, 'topics': topics, 'thread_comments': thread_comments, 'thread_count': thread_count, 'q': q}
-    return render(request, 'base/home.html', context )
 
+    topics = Topic.objects.all()
+
+    # Fetch recent news threads
+    recent_news_threads = Thread.objects.filter(Q(topic__name='General Announcements') | Q(topic__name='Educational Engagements'))[:3]
+
+    # Fetch recent events threads
+    recent_events_threads = Thread.objects.filter(Q(topic__name='University Events') | Q(topic__name='Student Events'))[:3]
+    thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:3]
+    
+    context = {
+        'threads': threads,
+        'topics': topics,
+        'thread_comments': thread_comments,
+        'thread_count': thread_count,
+        'q': q,
+        'recent_news_threads': recent_news_threads,
+        'recent_events_threads': recent_events_threads,
+    }
+    return render(request, 'base/home.html', context)
  
 def thread(request, pk):
      
@@ -242,8 +285,20 @@ def activityPage(request):
 ##################################################################################################
 def socialPage(request):
     # Retrieve existing social page posts
+    # q = request.GET.get('q') if request.GET.get('q') != None else ''
+    # threads = Thread.objects.filter(
+    #     Q(topic__name__icontains=q) |
+    #     Q(name__icontains=q) |
+    #     Q(description__icontains=q)
+    # )
     posts = SocialPage.objects.all().order_by('-timestamp')
-    context = {'posts': posts}
+    topics = Topic.objects.all()
+    recent_news_threads = Thread.objects.filter(Q(topic__name='General Announcements') | Q(topic__name='Educational Engagements'))[:3]
+
+    # Fetch recent events threads
+    recent_events_threads = Thread.objects.filter(Q(topic__name='University Events') | Q(topic__name='Student Events'))[:3]
+    # thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:3]
+    context = {'posts': posts, 'topics': topics, 'recent_news_threads': recent_news_threads, 'recent_events_threads': recent_events_threads}
     return render(request, 'base/social_page.html', context)
 
 @login_required(login_url='login')
@@ -279,7 +334,13 @@ def deleteSocialPost(request, pk):
 
 
 def uniMap(request):
-     return render(request, 'base/unimap.html')
+    topics = Topic.objects.all()
+    recent_news_threads = Thread.objects.filter(Q(topic__name='General Announcements') | Q(topic__name='Educational Engagements'))[:3]
+
+    # Fetch recent events threads
+    recent_events_threads = Thread.objects.filter(Q(topic__name='University Events') | Q(topic__name='Student Events'))[:3]
+    context = {'topics': topics, 'recent_news_threads': recent_news_threads, 'recent_events_threads': recent_events_threads}
+    return render(request, 'base/unimap.html', context)
 
 
 

@@ -135,3 +135,9 @@ if (chatbotForm) {
     if (input) input.value = "";
   });
 }
+document.addEventListener('DOMContentLoaded', function() {
+  var activityComponent = document.getElementById('activity-component');
+  if (activityComponent) {
+    activityComponent.style.display = 'none';
+  }
+});

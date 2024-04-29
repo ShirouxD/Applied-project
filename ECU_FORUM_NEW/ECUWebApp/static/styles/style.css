@@ -1407,3 +1407,18 @@ a {
   position: unset !important;
   padding: 0px !important;
 }
+
+
+.flashing-light {
+  display: inline-block;
+  width: 10px; /* Adjust width as needed */
+  height: 10px; /* Adjust height as needed */
+  background-color: red; /* Or any other color you prefer */
+  border-radius: 50%; /* Makes the div circular */
+  animation: flash 1s infinite alternate; /* Flashing animation */
+}
+
+@keyframes flash {
+  from { opacity: 1; } /* Fully visible */
+  to { opacity: 0; } /* Fully transparent */
+}
