@@ -79,6 +79,20 @@ class SocialPage(models.Model):
 
     def __str__(self):
         return f"Post by {self.user.username} on {self.timestamp}"
+    
+
+class SocialPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    caption = models.TextField()
+    image = models.ImageField(upload_to='social_images', null=True, blank=True)
+    video = models.FileField(upload_to='social_videos', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+class SocialComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(SocialPost, on_delete=models.CASCADE)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
 
 class Room(models.Model):
     name = models.CharField(max_length=100)

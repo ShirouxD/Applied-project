@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Thread, SocialPage, User, Reservation, Room, Message
+from .models import Thread, SocialPage, User, Reservation, Room, Message, SocialComment
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -45,8 +45,19 @@ class SocialPageForm(forms.ModelForm):
 
         return cleaned_data
     
+class SocialCommentForm(forms.ModelForm):
+    class Meta:
+        model = SocialComment  # Specify the model to use
+        fields = ['body']  # Specify the fields to include in the form
+        labels = {
+            'body': 'Your Comment'
+        }
+        widgets = {
+            'body': forms.Textarea(attrs={'placeholder': 'Write your comment here...'}),
+        }  # Optional: Add widget attributes for styling or behavior
 
-    
+
+
     
 class UserForm(ModelForm):
     class Meta:

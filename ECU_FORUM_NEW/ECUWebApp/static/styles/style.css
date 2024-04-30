@@ -1223,18 +1223,18 @@ a {
 
 /* Individual Post */
 .social-page__post {
-  margin-bottom: 20px; /* Adjust as needed */
-  padding-bottom: 20px; /* Add some padding between posts */
-  border-bottom: 1px solid #ccc; /* Add a solid border line between posts */
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: var(--color-dark);
+  border-radius: 1rem;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
 }
 
-/* Post Image */
 .social-page__post img {
   max-width: 100%;
   border-radius: 8px;
 }
 
-/* Post Video */
 .social-page__post video {
   width: 100%;
   border-radius: 8px;
@@ -1340,7 +1340,7 @@ a {
 }
 
 .social-page__post input[type="submit"]:hover {
-  background: #449d44;
+  background: #c82333;
 }
 
 .dropdown-button-notification svg {
@@ -1422,3 +1422,123 @@ a {
   from { opacity: 1; } /* Fully visible */
   to { opacity: 0; } /* Fully transparent */
 }
+
+/* Style the main container */
+.social-post {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Style the post */
+.post {
+  background-color: var(--color-dark-medium);
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.post img {
+  max-width: 100%;
+  height: auto;
+}
+
+.post video {
+  max-width: 100%;
+  height: auto;
+}
+
+.post p {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* Style the comments section */
+.comments {
+  margin-top: 20px;
+}
+
+.comments h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.comments ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.comments li {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.comments li:last-child {
+  border-bottom: none;
+}
+
+.comments p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.comments span {
+  font-size: 12px;
+  color: #888;
+}
+
+.comments a {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.comments a:hover {
+  text-decoration: underline;
+}
+
+.comments button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.comments button:hover {
+  background-color: #c82333;
+}
+
+/* Style the add comment form */
+form {
+  margin-top: 20px;
+}
+
+
+form input[type="text"],
+form textarea {
+  background-color: var(--color-dark-light);
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  color: #ffffff; /* Change the text color */
+}
+
+form textarea::placeholder {
+  color: #ffffff; /* Change placeholder text color here */
+}
+
+form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+

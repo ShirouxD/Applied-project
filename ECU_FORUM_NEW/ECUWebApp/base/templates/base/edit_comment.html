@@ -1,0 +1,10 @@
+{% extends 'main.html' %}
+{% block content %}
+<main class="edit-comment">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+</main>
+{% endblock %}

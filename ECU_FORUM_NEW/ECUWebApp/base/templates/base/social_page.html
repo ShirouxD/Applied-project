@@ -1,88 +1,91 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <main class="layout layout--3">
-        <div class="container">
-            <!-- Topics Start -->
-            {% include 'base/topics_component.html' %}
+<main class="layout layout--3">
+    <div class="container">
+        <!-- Topics Start -->
+        {% include 'base/topics_component.html' %}
+        <!-- Topics End -->
 
-            <!-- Topics End -->
-
-            <!-- Room List Start -->
-            <div class="roomList">
-                <div class="mobile-menu">
-                    <form action="{% url 'home' %}" method="GET" class="header__search">
-                        <label>
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                                <title>search</title>
-                                <path d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"></path>
-                            </svg>
-                            <input name="q" placeholder="Search for posts" />
-                        </label>
-                    </form>
-                    <div class="mobile-menuItems">
-                        <a class="btn btn--main btn--pill" href="{% url 'topics' %}">Browse Topics</a>
-                        <a class="btn btn--main btn--pill" href="{% url 'activity' %}">Recent Activities</a>
-                    </div>
-                </div>
-                <div class="roomList__header">
-                    <div>
-                        <h2>Posts</h2>
-                        <p>{{ thread_count }} Posts available</p>
-                    </div>
-                    <a class="btn btn--main" href="{% url 'create_social_post' %}">
+        <!-- Room List Start -->
+        <div class="roomList">
+            <div class="mobile-menu">
+                <form action="{% url 'home' %}" method="GET" class="header__search">
+                    <label>
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                            <title>add</title>
-                            <path d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"></path>
+                            <title>search</title>
+                            <path d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"></path>
                         </svg>
-                        Create Post
-                    </a>
+                        <input name="q" placeholder="Search for posts" />
+                    </label>
+                </form>
+                <div class="mobile-menuItems">
+                    <a class="btn btn--main btn--pill" href="{% url 'topics' %}">Browse Topics</a>
+                    <a class="btn btn--main btn--pill" href="{% url 'activity' %}">Recent Activities</a>
                 </div>
+            </div>
+            <div class="roomList__header">
+                <div>
+                    <h2>Posts</h2>
+                    <p>{{ thread_count }} Posts available</p>
+                </div>
+                <a class="btn btn--main" href="{% url 'create_social_post' %}">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <title>add</title>
+                        <path d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"></path>
+                    </svg>
+                    Create Post
+                </a>
+            </div>
 
-                {% include 'base/feed_component.html' %}
+            {% include 'base/feed_component.html' %}
 
-                <!-- Social Page Feed Start -->
-                <div class="social-page__feed">
-                    <!-- Iterate over social page posts and display them -->
-                    {% for post in posts %}
+            <!-- Social Page Feed Start -->
+            <div class="social-page__feed">
+                <!-- Iterate over social page posts and display them -->
+                {% for post in posts %}
                     <div class="social-page__post">
                         <div class="avatar avatar--small">
-                            <img src="{{post.user.avatar.url}}" />
-                          </div>
-                        {{post.user.name}}
-                        <!-- Display post image or video -->
-                        {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="Post Image">
-                        {% elif post.video %}
-                        <video controls>
-                            <source src="{{ post.video.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        {% endif %}
-
+                            <img src="{{ post.user.avatar.url }}" />
+                        </div>
+                        <a href="{% url 'user_profile' post.user.id %}">
+                            <span>{{ post.user.name }}</span>
+                            <span>@{{ post.user.username }}</span>
+                        </a>
                         <!-- Display post caption -->
-                        <p>{{ post.caption }}</p>
-
+                        <p>
+                            <a href="{% url 'social_post' post.pk %}">{{ post.caption }}</a>
+                        </p>
+                        <!-- Link to the individual post page -->
+                        <a href="{% url 'social_post' post.pk %}">
+                            <!-- Display post image or video -->
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" alt="Post Image">
+                            {% elif post.video %}
+                                <video controls>
+                                    <source src="{{ post.video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            {% endif %}
+                        </a>
+                        
+                        <!-- Additional actions -->
                         {% if request.user == post.user %}
-
-                        <form action="{% url 'delete_social_post' post.id %}" method="POST">
-                            {% csrf_token %}
-                            <input type="submit" value="Delete">
-                        </form>
-
+                            <form action="{% url 'delete_social_post' post.pk %}" method="POST">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete">
+                            </form>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                </div>
-                <!-- Social Page Feed End -->
+                {% endfor %}
             </div>
-            <!-- Room List End -->
-
-            <!-- Activities Start -->
-            
-            {% include 'base/activity_component.html' %}
-            
-            <!-- Activities End -->
+            <!-- Social Page Feed End -->
         </div>
-    </main>
+        <!-- Room List End -->
+
+        <!-- Activities Start -->
+        {% include 'base/activity_component.html' %}
+        <!-- Activities End -->
+    </div>
+</main>
 {% endblock content %}

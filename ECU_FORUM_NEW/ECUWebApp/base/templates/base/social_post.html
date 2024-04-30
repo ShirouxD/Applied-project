@@ -1,0 +1,116 @@
+<!-- social_post.html -->
+
+{% extends 'main.html' %}
+{% block content %}
+<main class="social-post">
+    <div class="post">
+        <!-- Display user avatar and username -->
+        <div class="user-info">
+            <img src="{{ post.user.avatar.url }}" alt="{{ post.user.username }} Avatar" class="avatar">
+            <p class="username"> {{ post.user.username }}</p>
+        </div>
+        
+        <!-- Display post caption -->
+        <p>{{ post.caption }}</p>
+
+        <!-- Display post content -->
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post Image">
+        {% elif post.video %}
+        <video controls>
+            <source src="{{ post.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        {% endif %}
+
+        <!-- Display comments -->
+        <div class="comments">
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in comments %}
+                <li>
+                    <!-- Move comment content below user info -->
+                    <div class="comment-info">
+                        <img src="{{ comment.user.avatar.url }}" alt="{{ comment.user.username }} Avatar" class="avatar">
+                        <span>{{ comment.user.username }} - {{ comment.created }}</span>
+                    </div>
+                    <div class="comment-content"><p>{{ comment.body }}</p> </div>
+                    <div class="comment-actions">
+                        {% if request.user == comment.user %}
+                        <a href="{% url 'edit_comment' comment.pk %}" class="btn btn-edit">Edit</a>
+                        <form action="{% url 'delete_social_comment' comment.id %}" method="post" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">Delete</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Add comment form -->
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-add-comment">Add Comment</button>
+        </form>
+    </div>
+</main>
+
+<style>
+    
+
+    .avatar {
+        width: 40px; /* Adjust the size as needed */
+        height: 40px; /* Adjust the size as needed */
+        border-radius: 50%; /* Make it round */
+        margin-right: 10px;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .username {
+        margin: 0;
+        color: aqua;
+    }
+
+    .comment-content {
+        margin-top: 5px; /* Adjust margin-top as needed */
+    }
+
+    .comment-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .comment-actions {
+        display: flex;
+        
+        margin-top: 3px; /* Adjust margin-top as needed */
+    }
+
+    .btn {
+        padding: 3px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-edit {
+        margin-top: 17px;
+        margin-right: 5px; /* Add margin between buttons */
+        color: #fff;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+    }
+
+    /* Add more styles as needed */
+</style>
+{% endblock %}

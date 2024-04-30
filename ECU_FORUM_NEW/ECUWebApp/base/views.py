@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation, Chat, Message
-from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm, MessageForm, ChatbotMessageForm
+from .models import Thread, Topic, Comment, SocialPage, User, Room, Reservation, Chat, Message, SocialPost, SocialComment
+from .forms import ThreadForm, SocialPageForm, UserForm, MyUserCreationForm, ReservationForm, MessageForm, ChatbotMessageForm, SocialCommentForm
 from django.db.models import Q
 from time import sleep
 from . import eliza
@@ -291,7 +291,7 @@ def socialPage(request):
     #     Q(name__icontains=q) |
     #     Q(description__icontains=q)
     # )
-    posts = SocialPage.objects.all().order_by('-timestamp')
+    posts = SocialPost.objects.all().order_by('-created')
     topics = Topic.objects.all()
     recent_news_threads = Thread.objects.filter(Q(topic__name='General Announcements') | Q(topic__name='Educational Engagements'))[:3]
 
@@ -301,15 +301,61 @@ def socialPage(request):
     context = {'posts': posts, 'topics': topics, 'recent_news_threads': recent_news_threads, 'recent_events_threads': recent_events_threads}
     return render(request, 'base/social_page.html', context)
 
+def socialPost(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+    comments = post.socialcomment_set.all()
+    if request.method == 'POST':
+        form = SocialCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
+            return redirect('social_post', pk=pk)
+    else:
+        form = SocialCommentForm()
+    return render(request, 'base/social_post.html', {'post': post, 'comments': comments, 'form': form})
+
+
+
+
+def deleteSocialComment(request, pk):
+    comment = get_object_or_404(SocialComment, pk=pk)
+    if request.method == 'POST':
+        if comment.user == request.user:
+            comment.delete()
+            return redirect('social_post', pk=comment.post.pk)  # Redirect to the social post comment after deletion
+    return redirect('home')  # Redirect to the home page if the user is not authorized or request method is not POST
+
+def editComment(request, pk):
+    comment = get_object_or_404(SocialComment, pk=pk)
+    if request.method == 'POST':
+        form = SocialCommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('social_post', pk=comment.post.pk)
+    else:
+        form = SocialCommentForm(instance=comment)
+    return render(request, 'base/edit_comment.html', {'form': form})
+
 @login_required(login_url='login')
 def createSocialPost(request):
     # Create a new social page post
     if request.method == 'POST':
         form = SocialPageForm(request.POST, request.FILES)
         if form.is_valid():
+            # Save the social page post
             post = form.save(commit=False)
             post.user = request.user
             post.save()
+            
+            # Create a corresponding SocialPost object
+            social_post = SocialPost.objects.create(
+                user=request.user,
+                image=post.image,  # You can adjust this based on your model fields
+                video=post.video,  # You can adjust this based on your model fields
+                caption=post.caption  # You can adjust this based on your model fields
+            )
             return redirect('social_page')
     else:
         form = SocialPageForm()
