@@ -104,28 +104,116 @@ def registerPage(request):
 #     context = {'threads': threads, 'topics': topics, 'thread_comments': thread_comments, 'thread_count': thread_count, 'q': q}
 #     return render(request, 'base/home.html', context )
 
+# def home(request):
+#     q = request.GET.get('q') if request.GET.get('q') != None else ''
+#     threads = Thread.objects.filter(
+#         Q(topic__name__icontains=q) |
+#         Q(name__icontains=q) |
+#         Q(description__icontains=q)
+#     )
+#     thread_count = threads.count()
+
+#     paginator = Paginator(threads, 6)  # Show 5 threads per page
+
+#     page_number = request.GET.get('page')
+#     try:
+#         threads = paginator.page(page_number)
+#     except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#         threads = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#         threads = paginator.page(paginator.num_pages)
+
+
+#     topics = Topic.objects.all()
+
+#     # Fetch recent news threads
+#     recent_news_threads = Thread.objects.filter(Q(topic__name='General Announcements') | Q(topic__name='Educational Engagements'))[:3]
+
+#     # Fetch recent events threads
+#     recent_events_threads = Thread.objects.filter(Q(topic__name='University Events') | Q(topic__name='Student Events'))[:3]
+#     thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:3]
+    
+#     context = {
+#         'threads': threads,
+#         'topics': topics,
+#         'thread_comments': thread_comments,
+#         'thread_count': thread_count,
+#         'q': q,
+#         'recent_news_threads': recent_news_threads,
+#         'recent_events_threads': recent_events_threads,
+#     }
+#     return render(request, 'base/home.html', context)
+ 
+
+
+from django.db.models import Case, When, Value, IntegerField
+
 def home(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q') if request.GET.get('q') else ''
+    
+    # Fetch all threads based on user input
     threads = Thread.objects.filter(
         Q(topic__name__icontains=q) |
         Q(name__icontains=q) |
         Q(description__icontains=q)
     )
+    
+    # Define custom ordering to prioritize threads within specific topics
+    topic_priority = Case(
+        When(topic__name="General Announcements", then=Value(1)),
+        When(topic__name="Educational Engagements", then=Value(2)),
+        When(topic__name="University Events", then=Value(3)),
+        When(topic__name="Student Events", then=Value(4)),
+        When(topic__name="Project Group Requests", then=Value(5)),
+        When(topic__name="Study Group Formations", then=Value(6)),
+        default=Value(7),
+        output_field=IntegerField(),
+    )
+    
+    # Define custom ordering within specific topics to prioritize "Thread 1"
+    thread1_priority = Case(
+        When(topic__name="General Announcements", name="Official Announcements and Updates", then=Value(1)),
+        When(topic__name="Educational Engagements", name="Explore Academic Horizons: Seminars, Workshops, and Guest Speakers", then=Value(1)),
+        When(topic__name="University Events", name="University-Sponsored Events", then=Value(1)),
+        When(topic__name="Student Events", name="Student-Sponsored Events and Activities Hub", then=Value(1)),
+        When(topic__name="Project Group Requests", name="Project Group Formation and Collaboration", then=Value(1)),
+        When(topic__name="Study Group Formations", name="Study Groups", then=Value(1)),
+        When(topic__name="Software Engineering U65", name="Discuss anything and everything related to SE U65!", then=Value(1)),
+        When(topic__name="Cyber Security Y89", name="Discuss anything and everything related to CS Y89!", then=Value(1)),
+        default=Value(2),
+        output_field=IntegerField(),
+    )
+    
+    # If filtered by topic, prioritize "Thread 1" within specific topics
+    if q:
+        threads = threads.annotate(
+            topic_priority=topic_priority,
+            thread1_priority=thread1_priority
+        ).order_by('topic_priority', 'thread1_priority', '-created')
+    else:
+        # If not filtered, maintain default ordering by creation date
+        threads = threads.order_by('-created')
+
+    # Count total number of threads
     thread_count = threads.count()
 
-    paginator = Paginator(threads, 6)  # Show 5 threads per page
+    # Paginate threads to display 6 per page
+    paginator = Paginator(threads, 6)
 
+    # Get current page number from the request
     page_number = request.GET.get('page')
     try:
         threads = paginator.page(page_number)
     except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
+        # If page is not an integer, deliver first page
         threads = paginator.page(1)
     except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
+        # If page is out of range, deliver last page of results
         threads = paginator.page(paginator.num_pages)
 
-
+    # Fetch all topics
     topics = Topic.objects.all()
 
     # Fetch recent news threads
@@ -133,6 +221,8 @@ def home(request):
 
     # Fetch recent events threads
     recent_events_threads = Thread.objects.filter(Q(topic__name='University Events') | Q(topic__name='Student Events'))[:3]
+    
+    # Fetch thread comments
     thread_comments = Comment.objects.filter(Q(thread__topic__name__icontains=q))[0:3]
     
     context = {
@@ -145,10 +235,16 @@ def home(request):
         'recent_events_threads': recent_events_threads,
     }
     return render(request, 'base/home.html', context)
- 
+
+
+
+
+
+
+
 def thread(request, pk):
      
-     thread = Thread.objects.get(id=pk)
+     thread = get_object_or_404(Thread, id=pk)
      thread_comments = thread.comment_set.all()
      participants = thread.participants.all()
 
@@ -161,8 +257,43 @@ def thread(request, pk):
          thread.participants.add(request.user)
          return redirect('thread', pk=thread.id)
      
+     
      context = {'thread': thread, 'thread_comments': thread_comments, 'participants': participants}
      return render(request, 'base/thread.html', context)
+
+
+# def thread(request, pk):
+#     thread = get_object_or_404(Thread, id=pk)
+#     thread_comments = thread.comment_set.all()
+#     participants = thread.participants.all()
+
+#     pinned_thread = Thread.objects.filter(pinned=True).first()
+#     print("Pinned Thread:", pinned_thread)  # Add this line for debugging
+
+#     # Get the rest of the threads excluding the pinned thread
+#     other_threads = Thread.objects.filter(pinned=False).exclude(id=pinned_thread.id) if pinned_thread else Thread.objects.exclude(id=thread.id)
+    
+#     # Combine pinned thread and other threads
+#     threads = [pinned_thread] if pinned_thread else []
+#     threads += list(other_threads)
+
+#     if request.method == 'POST':
+        
+#         comment = Comment.objects.create(
+#             user=request.user,
+#             thread=thread,
+#             body=request.POST.get('body')
+#         )
+#         thread.participants.add(request.user)
+#         return redirect('thread', pk=thread.id)
+
+#     context = {'thread': thread, 'thread_comments': thread_comments, 'participants': participants, 'threads': threads, 'pinned_thread': pinned_thread}
+#     return render(request, 'base/thread.html', context)
+
+
+
+
+
 
 
 def userProfile(request, pk):
@@ -210,11 +341,11 @@ def createThread(request):
 
 def is_title_restricted(topic, user):
     # Check if the current user is user1
-    if user.username == 'admin_ecu':#or user.username == 'user2' or user.username == 'user3':
+    if user.username == 'admin_ecu' or user.username == 'admin_ecu2': #or user.username == 'user3':
         # Grant admin-like access to user1
         return True
     # For other users, restrict posting in Main Topic 1
-    return topic.name != 'General Announcements' #and topic.name != 'Main Topic 2'
+    return topic.name != 'General Announcements' and topic.name != 'Educational Engagements' and topic.name != 'University Events' #and topic.name != 'Main Topic 2'
 
 
 

@@ -46,6 +46,7 @@ class Thread(models.Model):
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
     updated = models.DateTimeField(auto_now= True)
     created = models.DateTimeField(auto_now_add= True)
+    pinned = models.BooleanField(default=False)
 
     class Meta:
        ordering = ['-updated', '-created']
