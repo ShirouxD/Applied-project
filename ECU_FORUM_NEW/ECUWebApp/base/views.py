@@ -496,7 +496,7 @@ def createSocialPost(request):
 
 @login_required(login_url='login')
 def deleteSocialPost(request, pk):
-    social_page_post = get_object_or_404(SocialPage, pk=pk)
+    social_page_post = get_object_or_404(SocialPost, pk=pk)
 
     if request.user != social_page_post.user:
         return HttpResponse('You cannot do that!')
